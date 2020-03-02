@@ -1,0 +1,105 @@
+.MODEL SAMLL
+.STACK 200H
+.DATA
+main_menu db "*******"BASIC CALCULATOR"*******",0dh,0ah
+db "-------------------------------",0dh,0ah
+db "  **Enter 1 for Addition** ",0dh,0ah
+db "  **Enter 2 for Subtraction** ",0dh,0ah
+db "-------------------------------",0dh,0ah
+MSG1 db 0dh,0ah,"Enter your Choice:",0dh,0ah,'$'
+MSG2 db 0dh,0ah,"Enter First number:",0dh,0ah,'$'
+MSG3 db 0dh,0ah,"Enter Second number:",0dh,0ah,'$'
+MSG4 db '$'
+MSG5 db 0dh,0ah,"Your Result is:"
+MSG6 db ?, '$'
+choice db ?
+no11 db ?
+no22 db ?
+
+.CODE
+Main proc
+    MOV AX,@data
+    MOV DS,AX
+    Start:
+    LEA DX,main_menu
+    MOV AH,9H
+    INT 21H
+    
+    MOV AH,1H
+    INT 21H
+    
+    MOV choice,AL
+    
+    CMP choice,'1'
+    JE addr
+    CMP choice,'2'
+    JE subtr
+  
+    addr:
+    LEA DX,msg2      ;1st input
+    MOV AH,9
+    INT 21H
+    
+    MOV AH,1H
+    INT 21H
+    
+     
+    MOV CH,AL
+    
+    LEA DX,msg3      ;2nd input
+    MOV AH,9
+    INT 21H
+    
+    MOV AH,1H
+    INT 21H 
+    
+    ADD AL,CH
+    SUB AL,30H
+    MOV msg6,AL
+    
+    LEA DX,msg5
+    MOV AH,9
+    INT 21H
+    
+    
+    MOV AH,4CH
+    INT 21H  
+    
+    subtr:
+    inpt:
+     
+    MOV AH,9
+    LEA DX,msg2
+    INT 21H
+
+    MOV AH,1
+    INT 21H
+    SUB AL,30H
+    MOV no11,AL
+
+    MOV AH,9
+    LEA DX,msg3
+    INT 21H
+
+    MOV AH,1
+    INT 21H
+    SUB AL,30H
+    MOV no22,AL
+
+    MOV AH,9
+    LEA DX,msg5
+    INT 21H
+
+    MOV AL,no11
+    SUB AL,no22
+    ADD AL,30H
+
+    MOV AH,2
+    MOV DL,AL
+    INT 21H
+
+    MOV AH,4CH
+    INT 21H
+    
+    Main endp
+end main
